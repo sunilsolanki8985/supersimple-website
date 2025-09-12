@@ -3,13 +3,581 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>3D Birthday Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        h1 { 
+            font-size: 60px; 
+            font-weight: bold; 
+            text-align: center; 
+            animation: liveColor 2s infinite linear; 
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle { 
+            font-size: 25px; 
+            font-weight: 500; 
+            text-align: center; 
+            background: linear-gradient(to right, #ff8a00, #da1b60, #4a00e0);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes liveColor {
+            0% { color: #ff4d4d; text-shadow: 0 0 20px #ff4d4d; }
+            25% { color: #4dff4d; text-shadow: 0 0 20px #4dff4d; }
+            50% { color: #4d4dff; text-shadow: 0 0 20px #4d4dff; }
+            75% { color: #ffff4d; text-shadow: 0 0 20px #ffff4d; }
+            100% { color: #ff4d4d; text-shadow: 0 0 20px #ff4d4d; }
+        }
+        
+        .gallery-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto 50px;
+            perspective: 1200px;
+        }
+        
+        .circular-gallery {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .gallery-item {
+            position: absolute;
+            width: 180px;
+            height: 240px;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(250px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(280px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+        
+        .gallery-item .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+        
+        .gallery-item.flipped .card {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .card-front {
+            background: linear-gradient(45deg, #ff8a00, #e52e71);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-back {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 10px 0 5px;
+        }
+        
+        .card-desc {
+            font-size: 14px;
+            padding: 0 10px;
+        }
+        
+        .gallery-item:nth-child(1) { --i: 0; }
+        .gallery-item:nth-child(2) { --i: 1; }
+        .gallery-item:nth-child(3) { --i: 2; }
+        .gallery-item:nth-child(4) { --i: 3; }
+        .gallery-item:nth-child(5) { --i: 4; }
+        .gallery-item:nth-child(6) { --i: 5; }
+        .gallery-item:nth-child(7) { --i: 6; }
+        .gallery-item:nth-child(8) { --i: 7; }
+        
+        .message {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .message p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cake {
+            font-size: 50px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .floating-element {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.7;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-container {
+                width: 350px;
+                height: 350px;
+            }
+            
+            .gallery-item {
+                width: 140px;
+                height: 190px;
+                transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(180px);
+            }
+            
+            .gallery-item:hover {
+                transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(200px) scale(1.1);
+            }
+            
+            h1 {
+                font-size: 40px;
+            }
+            
+            .subtitle {
+                font-size: 20px;
+            }
+            
+            .card-title {
+                font-size: 16px;
+            }
+            
+            .card-desc {
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .gallery-item {
+                width: 120px;
+                height: 160px;
+                transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(150px);
+            }
+            
+            .gallery-item:hover {
+                transform: translate(-50%, -50%) rotateY(calc(var(--i) * 45deg)) translateZ(170px) scale(1.1);
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .card-title {
+                font-size: 14px;
+            }
+            
+            .card-desc {
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h>😊😊</h>
-<p> How are you my name is sunil solanki from ujjain in gopal pura in madhya pradesh were a <p>
-    <a href="https://www.google.com/">google</a>
-    <br />
-    <a href="k.html">my file</a>
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 5%;">🎈</div>
+        <div class="floating-element" style="top: 20%; left: 90%;">🎁</div>
+        <div class="floating-element" style="top: 30%; left: 15%;">🎊</div>
+        <div class="floating-element" style="top: 40%; left: 85%;">🎉</div>
+        <div class="floating-element" style="top: 60%; left: 10%;">🥳</div>
+        <div class="floating-element" style="top: 70%; left: 95%;">🎂</div>
+        <div class="floating-element" style="top: 85%; left: 20%;">✨</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Happy Birthday!</h1>
+            <div class="subtitle">Celebrating your special day with joy and happiness</div>
+            <div class="cake">🎂</div>
+        </div>
+
+        <div class="gallery-container">
+            <div class="circular-gallery">
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Birthday Balloons">
+                            <div class="card-title">Balloons</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">The world's largest birthday cake weighed over 128,000 pounds!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Birthday Cake">
+                            <div class="card-title">Cake</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">The tradition of birthday cakes started in ancient Greece.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Birthday Gift">
+                            <div class="card-title">Gifts</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">The song "Happy Birthday" is the most recognized song in the English language.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Celebration">
+                            <div class="card-title">Party</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">Queen Elizabeth II has two birthdays each year!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Party">
+                            <div class="card-title">Celebration</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">In many countries, your 1st, 10th, 16th, 18th, 21st, and 100th birthdays are considered especially important.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1549589237-9e70b6be4da8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cupcakes">
+                            <div class="card-title">Cupcakes</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">The most birthdays occur in September, followed by October.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Balloons">
+                            <div class="card-title">Decorations</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">In Jamaica, people are sometimes covered in flour on their birthdays.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="card">
+                        <div class="card-face card-front">
+                            <img src="https://images.unsplash.com/photo-1525338078859-6cd68c7cd901?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Birthday Celebration">
+                            <div class="card-title">Memories</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div class="card-title">Fun Fact</div>
+                            <p class="card-desc">The world record for most candles on a birthday cake is 72,585!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <p>Drag or touch to rotate the gallery • Click on cards to flip them</p>
+        </div>
+
+        <div class="message">
+            <p>On your special day, may you be surrounded by laughter, love, and joy. May this year bring you countless blessings, new adventures, and all the happiness you deserve!</p>
+            <p>Wishing you a fantastic birthday and a wonderful year ahead! 🎉🎁🥳</p>
+        </div>
+    </div>
+
+    <script>
+        const circularGallery = document.querySelector('.circular-gallery');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        // Variables for rotation control
+        let isDragging = false;
+        let startX, startY;
+        let initialRotation = 0;
+        let currentRotation = 0;
+        let rotationX = 0;
+        let rotationY = 0;
+        
+        // Initialize rotation
+        circularGallery.style.transform = `rotateY(0deg)`;
+        
+        // Mouse and touch events for desktop and mobile
+        circularGallery.addEventListener('mousedown', dragStart);
+        circularGallery.addEventListener('touchstart', dragStart);
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+        
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('touchend', dragEnd);
+        
+        // Click to flip cards
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('flipped');
+            });
+        });
+        
+        function dragStart(e) {
+            e.preventDefault();
+            
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            isDragging = true;
+            initialRotation = currentRotation;
+        }
+        
+        function drag(e) {
+            if (!isDragging) return;
+            
+            let currentX, currentY;
+            
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX;
+                currentY = e.touches[0].clientY;
+            } else {
+                currentX = e.clientX;
+                currentY = e.clientY;
+            }
+            
+            // Calculate rotation based on mouse/touch movement
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
+            
+            // Adjust rotation speed
+            rotationX = deltaY * 0.3;
+            rotationY = deltaX * 0.3;
+            
+            // Apply rotation
+            currentRotation = initialRotation + deltaX;
+            circularGallery.style.transform = `rotateY(${currentRotation}deg) rotateX(${rotationX}deg)`;
+        }
+        
+        function dragEnd() {
+            isDragging = false;
+            
+            // Add some inertia to the rotation
+            const inertiaY = rotationY * 0.2;
+            const inertiaX = rotationX * 0.2;
+            
+            let inertiaRotation = currentRotation;
+            const animateInertia = () => {
+                inertiaRotation += inertiaY;
+                rotationX += (0 - rotationX) * 0.1;
+                
+                circularGallery.style.transform = `rotateY(${inertiaRotation}deg) rotateX(${rotationX}deg)`;
+                
+                if (Math.abs(inertiaY) > 0.5) {
+                    requestAnimationFrame(animateInertia);
+                }
+            };
+            
+            if (Math.abs(inertiaY) > 0.5) {
+                requestAnimationFrame(animateInertia);
+            }
+        }
+        
+        // Add floating elements dynamically
+        const floatingContainer = document.querySelector('.floating-elements');
+        const floatingSymbols = ['🎈', '🎁', '🎊', '🎉', '🥳', '🎂', '✨', '❤️', '⭐', '🌟'];
+        
+        for (let i = 0; i < 15; i++) {
+            const element = document.createElement('div');
+            element.classList.add('floating-element');
+            element.innerHTML = floatingSymbols[Math.floor(Math.random() * floatingSymbols.length)];
+            
+            element.style.left = `${Math.random() * 100}%`;
+            element.style.top = `${Math.random() * 100}%`;
+            element.style.fontSize = `${Math.random() * 20 + 15}px`;
+            element.style.animationDuration = `${Math.random() * 20 + 10}s`;
+            element.style.animationDelay = `${Math.random() * 5}s`;
+            
+            floatingContainer.appendChild(element);
+        }
+        
+        // Add subtle automatic rotation when not interacting
+        let autoRotateTimeout;
+        
+        function startAutoRotation() {
+            clearTimeout(autoRotateTimeout);
+            autoRotateTimeout = setTimeout(() => {
+                autoRotate();
+            }, 3000);
+        }
+        
+        function autoRotate() {
+            if (isDragging) return;
+            
+            currentRotation += 0.3;
+            circularGallery.style.transform = `rotateY(${currentRotation}deg)`;
+            
+            requestAnimationFrame(autoRotate);
+        }
+        
+        // Start auto rotation after a delay
+        startAutoRotation();
+        
+        // Reset auto rotation on interaction
+        document.addEventListener('mousedown', () => {
+            clearTimeout(autoRotateTimeout);
+        });
+        
+        document.addEventListener('touchstart', () => {
+            clearTimeout(autoRotateTimeout);
+        });
+    </script>
 </body>
 </html>
