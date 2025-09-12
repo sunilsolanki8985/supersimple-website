@@ -494,8 +494,8 @@
             const deltaY = currentY - startY;
             
             // Adjust rotation speed
-            rotationX = deltaY * 0.006;
-            rotationY = deltaX * 0.006;
+            rotationX = deltaY * 0.01;
+            rotationY = deltaX * 0.01;
             
             // Apply rotation
             currentRotation = initialRotation + deltaX;
@@ -576,4 +576,5 @@
         });
     </script>
 </body>
+
 </html>
