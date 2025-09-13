@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Birthday Celebration</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+    background-size: 400% 400%;
+    animation: gradient 5s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+  }
+
+  /* Heading */
+  .animated-heading {
+    font-size: 35px;
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    perspective: 1000px;
+  }
+  @media (min-width: 768px){ .animated-heading{ font-size:50px; } }
+  @media (min-width: 1024px){ .animated-heading{ font-size:60px; } }
+
+  .animated-heading span{
+    display:inline-block;
+    margin:0 1px;
+    background: linear-gradient(90deg,#ff6666,#ffcc66,#ffff99,#99ff99,#66ffff,#9999ff,#ff99ff,#ff6666);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 3px #fff,0 0 5px #fff,0 0 10px #ff99ff,0 0 15px #66ffff,0 0 20px #99ff99;
+    animation: snakeGradient 4s linear infinite, shake 0.5s infinite;
+    transform-style: preserve-3d;
+    animation-delay: calc(var(--i) * 0.1s);
+  }
+
+  @keyframes snakeGradient {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+  }
+  @keyframes shake{
+    0% {transform:translateX(0);}
+    25% {transform:translateX(-2px);}
+    50% {transform:translateX(2px);}
+    75% {transform:translateX(-2px);}
+    100% {transform:translateX(0);}
+  }
+
+  /* Floating emojis */
+  .floating {
+    position: absolute;
+    top: 100%;
+    font-size: 40px;
+    animation: floatUp linear infinite;
+    opacity:0.9;
+  }
+  @keyframes floatUp {
+    from {transform:translateY(0);opacity:1;}
+    to {transform:translateY(-120vh);opacity:0;}
+  }
+
+  /* 3D Gallery */
+  .gallery-container {
+    width: 320px;
+    height: 320px;
+    perspective: 800px;
+    margin-top:10px;
+    position: relative;
+  }
+  @media (min-width: 1024px){
+    .gallery-container { width:500px; height:500px; perspective:1000px; margin-top:20px; }
+  }
+  .circular-gallery {
+    width:100%;
+    height:100%;
+    position:absolute;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    transition: transform 0.1s linear;
+  }
+  .gallery-item {
+    width:90px;
+    height:120px;
+    left:115px;
+    top:100px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    overflow:hidden;
+    transform: rotateY(calc(var(--i)*45deg)) translateZ(150px);
+  }
+  @media (min-width:1024px){
+    .gallery-item{ width:120px; height:160px; left:190px; top:170px; transform: rotateY(calc(var(--i)*45deg)) translateZ(300px); }
+  }
+  .gallery-item img {width:100%;height:100%;object-fit:cover;}
+
+  /* Personalized message */
+  .personal-message{
+    font-size:18px;
+    color:#fff;
+    text-align:center;
+    max-width:90%;
+    margin:30px 0 50px 0;
+    text-shadow:1px 1px 5px rgba(0,0,0,0.5);
+  }
+  @media (min-width:768px){ .personal-message{ font-size:20px; max-width:70%; } }
+  @media (min-width:1024px){ .personal-message{ font-size:22px; max-width:50%; } }
+</style>
+</head>
+<body>
+
+<h1 class="animated-heading" id="heading">🎂 Happy Birthday 🎉</h1>
+<div id="floating-container"></div>
+
+<div class="gallery-container">
+  <div class="circular-gallery" id="circularGallery">
+    <div class="gallery-item" style="--i:0"><img src="https://picsum.photos/200/300?1"></div>
+    <div class="gallery-item" style="--i:1"><img src="https://picsum.photos/200/300?2"></div>
+    <div class="gallery-item" style="--i:2"><img src="https://picsum.photos/200/300?3"></div>
+    <div class="gallery-item" style="--i:3"><img src="https://picsum.photos/200/300?4"></div>
+    <div class="gallery-item" style="--i:4"><img src="https://picsum.photos/200/300?5"></div>
+    <div class="gallery-item" style="--i:5"><img src="https://picsum.photos/200/300?6"></div>
+    <div class="gallery-item" style="--i:6"><img src="https://picsum.photos/200/300?7"></div>
+    <div class="gallery-item" style="--i:7"><img src="https://picsum.photos/200/300?8"></div>
+  </div>
+</div>
+
+<p class="personal-message">
+  Wishing you a day filled with love, joy, and all the happiness in the world! 🎉
+</p>
+
+<script>
+  // Heading split for animation
+  const heading = document.getElementById("heading");
+  const text = heading.innerText;
+  heading.innerHTML = "";
+  for (let i=0;i<text.length;i++){
+    const span = document.createElement("span");
+    span.innerText=text[i];
+    span.style.setProperty('--i',i);
+    heading.appendChild(span);
+  }
+
+  // Floating emojis
+  const container = document.getElementById("floating-container");
+  const emojis = ["🎈","🎂","🎉","✨","🥳","🎁"];
+  function createEmoji(){
+    const emoji = document.createElement("span");
+    emoji.classList.add("floating");
+    emoji.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left=Math.random()*100+"vw";
+    emoji.style.animationDuration=(5+Math.random()*10)+"s";
+    container.appendChild(emoji);
+    setTimeout(()=>emoji.remove(),15000);
+  }
+  setInterval(createEmoji,800);
+
+  // Auto rotate + drag gallery
+  const gallery = document.getElementById("circularGallery");
+  let isDragging=false, startX=0, currentRotation=0, autoRotation=0;
+  function rotateAuto(){
+    if(!isDragging){ autoRotation += 0.5; gallery.style.transform=rotateY(${currentRotation+autoRotation}deg); }
+    requestAnimationFrame(rotateAuto);
+  }
+  rotateAuto();
+
+  const onPointerDown = (e)=>{
+    isDragging=true;
+    startX=e.clientX||e.touches[0].clientX;
+  }
+  const onPointerMove = (e)=>{
+    if(!isDragging) return;
+    const x=(e.clientX||e.touches[0].clientX)-startX;
+    gallery.style.transform=rotateY(${currentRotation+x+autoRotation}deg);
+  }
+  const onPointerUp=(e)=>{
+    if(!isDragging) return;
+    const x=(e.clientX||e.changedTouches[0].clientX)-startX;
+    currentRotation+=x;
+    isDragging=false;
+  }
+
+  gallery.addEventListener("mousedown",onPointerDown);
+  gallery.addEventListener("mousemove",onPointerMove);
+  gallery.addEventListener("mouseup",onPointerUp);
+  gallery.addEventListener("mouseleave",onPointerUp);
+  gallery.addEventListener("touchstart",onPointerDown);
+  gallery.addEventListener("touchmove",onPointerMove);
+  gallery.addEventListener("touchend",onPointerUp);
+</script>
+</body>
+</html>
