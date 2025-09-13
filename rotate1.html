@@ -495,8 +495,8 @@
             const deltaY = currentY - startY;
             
             // Adjust rotation speed
-            rotationX = deltaY * 0.1;
-            rotationY = deltaX * 0.1;
+            rotationX = deltaY * 0.6;
+            rotationY = deltaX * 0.6;
             
             // Apply rotation
             currentRotation = initialRotation + deltaX;
@@ -507,8 +507,8 @@
             isDragging = false;
             
             // Add some inertia to the rotation
-            const inertiaY = rotationY * 0.2;
-            const inertiaX = rotationX * 0.2;
+            const inertiaY = rotationY * 0.007;
+            const inertiaX = rotationX * 0.007;
             
             let inertiaRotation = currentRotation;
             const animateInertia = () => {
@@ -579,6 +579,7 @@
 </body>
 
 </html>
+
 
 
 
